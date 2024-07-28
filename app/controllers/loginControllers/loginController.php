@@ -8,8 +8,8 @@ class LoginController {
         $this->model = new LoginModel();
     }
 
-    public function login($username, $password){
-        return $this->model->login($username, $password);
+    public function login($nombreUsuario, $contrasenia){
+        return $this->model->login($nombreUsuario, $contrasenia);
     }
 }
 ?>

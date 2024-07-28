@@ -23,8 +23,8 @@
                     <span class="mb-2 text-md text-gray-400">Usuario</span>
                     <input
                             type="text"
-                            id="username"
-                            name="username"
+                            id="nombreUsuario"
+                            name="nombreUsuario"
                             class="w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-100 placeholder:font-light placeholder:text-gray-500"
                     />
                 </div>
@@ -32,8 +32,8 @@
                     <span class="mb-2 text-md text-gray-400">Contraseña</span>
                     <input
                             type="password"
-                            name="password"
-                            id="password"
+                            name="contrasenia"
+                            id="contrasenia"
                             class="w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-100 placeholder:font-light placeholder:text-gray-500"
                     />
                 </div>

@@ -2,16 +2,17 @@
 require_once __DIR__ . '/loginController.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $nombreUsuario = filter_input(INPUT_POST, 'nombreUsuario', FILTER_SANITIZE_STRING);
+    $contrasenia = filter_input(INPUT_POST, 'contrasenia', FILTER_SANITIZE_STRING);
 
-    if ($username && $password) {
+    if ($nombreUsuario && $contrasenia) {
         $controller = new LoginController();
-        $user = $controller->login($username, $password);
+        $user = $controller->login($nombreUsuario, $contrasenia);
 
         if ($user) {
             session_start();
-            $_SESSION['username'] = $user['username'];
+            $_SESSION['nombreUsuario'] = $user['nombreUsuario'];
+            $_SESSION['rol'] = $user['nombreRol']; // Almacenar el rol en la sesión
             header("Location: ../../views/loginViews/dashboard.php");
             exit();
         } else {
