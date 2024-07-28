@@ -10,13 +10,14 @@ require_once __DIR__ . '/../../config/checkSession.php';
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
 </head>
-<body class="bg-gray-100">
 
-<div class="navbar bg-base-100">
-    <div class="navbar-start">
-        <a class="btn btn-ghost text-xl">daisyUI</a>
+
+<body class="bg-gray-100">
+<div class="navbar bg-base-200 rounded-box shadow-lg mb-4">
+    <div class="flex-1">
+        <a class="text-xl font-bold">daisyUI</a>
     </div>
-    <div class="navbar-center hidden lg:flex">
+    <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
             <?php
 
@@ -41,9 +42,11 @@ require_once __DIR__ . '/../../config/checkSession.php';
             }
             ?>
         </ul>
-    </div>
-    <div class="navbar-end">
-        <a class="btn" href="../../controllers/loginControllers/logout.php">Cerrar sesión</a>
+
+        <button class="btn btn-ghost" onclick="toggleTheme()">
+            <i class="fas fa-adjust"></i>
+        </button>
+        <a class="btn-ghost" href="../../controllers/loginControllers/logout.php">Cerrar sesión</a>
     </div>
 </div>
 
