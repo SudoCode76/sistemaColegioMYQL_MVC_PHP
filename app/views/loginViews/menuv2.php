@@ -23,7 +23,7 @@ require_once __DIR__ . '/../../config/checkSession.php';
 
             if ($_SESSION['rol'] == 'Director') {
                 echo '<li><a href="../directorViews/cuentas.php">Cuentas</a></li>';
-                echo '<li><a href="directorPage2.php">Salarios</a></li>';
+                echo '<li><a href="../directorViews/gestionSalarios.php">Salarios</a></li>';
                 echo '<li><a href="directorPage2.php">Horarios</a></li>';
                 echo '<li><a href="directorPage2.php">Mensualidades</a></li>';
                 echo '<li><a href="directorPage2.php">Materias</a></li>';
