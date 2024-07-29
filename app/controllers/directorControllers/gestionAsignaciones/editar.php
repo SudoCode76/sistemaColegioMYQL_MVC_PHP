@@ -57,7 +57,7 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Asignación</title>
+    <title>Editar</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
@@ -90,5 +90,7 @@ if (isset($_GET['id'])) {
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
     </form>
 </div>
+
+<script src="https://cdn.tailwindcss.com"></script>
 </body>
 </html>

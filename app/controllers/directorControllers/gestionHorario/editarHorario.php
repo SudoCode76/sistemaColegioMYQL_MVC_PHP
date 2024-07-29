@@ -63,8 +63,7 @@ if (isset($_GET['id'])) {
 </head>
 <body>
 <div class="container mx-auto mt-5">
-    <h1 class="text-2xl font-bold mb-5">Editar Horario</h1>
-
+    <h1 class="text-2xl font-bold mb-5">Èditar Horario</h1>
     <?php if (isset($error)): ?>
         <div class="alert alert-error"><?php echo $error; ?></div>
     <?php endif; ?>

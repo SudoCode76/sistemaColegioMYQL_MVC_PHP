@@ -26,7 +26,6 @@ $estadoPago = isset($_GET['estadoPago']) ? $_GET['estadoPago'] : '';
         <div class="bg-base-200 p-6 rounded-box shadow-lg">
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-3xl font-bold">Gestión de Mensualidades</h1>
-                <a href="../../controllers/directorControllers/gestionMensualidades/editarMensualidad.php" class="btn btn-primary">Añadir Mensualidad</a>
             </div>
 
             <form method="GET" class="flex flex-col sm:flex-row gap-4 mb-6">
@@ -53,15 +52,18 @@ $estadoPago = isset($_GET['estadoPago']) ? $_GET['estadoPago'] : '';
                     </thead>
                     <tbody>
                     <?php
-                    $sql = "SELECT PM.codPago, E.nombre, E.apellido, PM.mesPago, PM.monto, PM.estadoPago
-                            FROM PAGO_MENSUALIDAD_ESTUDIANTE PM
-                            JOIN ESTUDIANTE E ON PM.codEstudiante = E.codEstudiante
+                    $sql = "SELECT E.codEstudiante, E.nombre, E.apellido, 
+                                   COALESCE(PM.mesPago, ?) AS mesPago, 
+                                   COALESCE(PM.monto, 0) AS monto, 
+                                   COALESCE(PM.estadoPago, 'Pendiente') AS estadoPago
+                            FROM ESTUDIANTE E
+                            LEFT JOIN PAGO_MENSUALIDAD_ESTUDIANTE PM 
+                            ON E.codEstudiante = PM.codEstudiante AND DATE_FORMAT(PM.mesPago, '%Y-%m') = ?
                             WHERE (E.nombre LIKE ? OR E.apellido LIKE ?)
-                            AND (? = '' OR DATE_FORMAT(PM.mesPago, '%Y-%m') = ?)
-                            AND (? = '' OR PM.estadoPago = ?)";
+                            AND (? = '' OR PM.estadoPago = ? OR PM.estadoPago IS NULL)";
                     $stmt = $conexion->prepare($sql);
                     $searchParam = "%$search%";
-                    $stmt->bind_param("ssssss", $searchParam, $searchParam, $mes, $mes, $estadoPago, $estadoPago);
+                    $stmt->bind_param("ssssss", $mes, $mes, $searchParam, $searchParam, $estadoPago, $estadoPago);
                     $stmt->execute();
                     $result = $stmt->get_result();
 
@@ -74,7 +76,7 @@ $estadoPago = isset($_GET['estadoPago']) ? $_GET['estadoPago'] : '';
                                     <td>" . htmlspecialchars($row["estadoPago"]) . "</td>
                                     <td>";
                             if ($row["estadoPago"] == 'Pendiente') {
-                                echo "<a href='../../controllers/directorControllers/gestionMensualidades/marcarPagado.php?id=" . urlencode($row["codPago"]) . "' class='btn btn-success btn-md mx-2'>Marcar como Pagado</a>";
+                                echo "<a href='../../controllers/directorControllers/gestionMensualidad/marcarPagado.php?estudiante=" . urlencode($row["codEstudiante"]) . "&mes=" . urlencode($row["mesPago"]) . "' class='btn btn-success btn-md mx-2'>Marcar como Pagado</a>";
                             }
                             echo "</td>
                                   </tr>";
