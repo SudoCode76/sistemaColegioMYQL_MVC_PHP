@@ -33,7 +33,7 @@ $month = isset($_GET['month']) ? $_GET['month'] : '';
                 <select name="role" class="select select-bordered">
                     <option value="">Todos los roles</option>
                     <option value="Director" <?php if ($role == 'Director') echo 'selected'; ?>>Director</option>
-                    <option value="Profesor" <?php if ($role == 'Profesor') echo 'selected'; ?>>Profesor</option>
+                    <option value="Docente" <?php if ($role == 'Docente') echo 'selected'; ?>>Docente</option>
                     <option value="Secretaria" <?php if ($role == 'Secretaria') echo 'selected'; ?>>Secretaria</option>
                     <option value="Estudiante" <?php if ($role == 'Estudiante') echo 'selected'; ?>>Estudiante</option>
                 </select>

@@ -24,10 +24,10 @@ require_once __DIR__ . '/../../config/checkSession.php';
             if ($_SESSION['rol'] == 'Director') {
                 echo '<li><a href="../directorViews/cuentas.php">Cuentas</a></li>';
                 echo '<li><a href="../directorViews/gestionSalarios.php">Salarios</a></li>';
-                echo '<li><a href="directorPage2.php">Horarios</a></li>';
-                echo '<li><a href="directorPage2.php">Mensualidades</a></li>';
-                echo '<li><a href="directorPage2.php">Materias</a></li>';
-            } elseif ($_SESSION['rol'] == 'Profesor') {
+                echo '<li><a href="../directorViews/horarios.php">Horarios</a></li>';
+                echo '<li><a href="../directorViews/mensualides.php">Mensualidades</a></li>';
+                echo '<li><a href="../directorViews/gestionAsignaciones.php">Asignaciones</a></li>';
+            } elseif ($_SESSION['rol'] == 'Docente') {
                 echo '<li><a href="profesorPage1.php">Página del Profesor 1</a></li>';
                 echo '<li><a href="profesorPage2.php">Página del Profesor 2</a></li>';
             } elseif ($_SESSION['rol'] == 'Secretaria') {

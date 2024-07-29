@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/checkSession.php';
-include "menu.php";
+include "menuv2.php";
 ?>
 
 <!DOCTYPE html>
