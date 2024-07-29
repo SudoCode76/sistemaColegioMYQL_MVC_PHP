@@ -1,3 +1,4 @@
+
 CREATE DATABASE colegioPrivado;
 USE colegioPrivado;
 CREATE TABLE EMPLEADO
@@ -133,24 +134,7 @@ CREATE TABLE NOTA
     CONSTRAINT FK_NOTA_CURSOMATERIA FOREIGN KEY (codCursoMateria) REFERENCES CURSOMATERIA (codCursoMateria)
 );
 
-CREATE TABLE MENSUALIDAD
-(
-    codMensualidad INT AUTO_INCREMENT,
-    monto          DECIMAL(10, 2) NOT NULL,
-    observacion    VARCHAR(100),
-    estado         VARCHAR(45),
-    fechaPago      DATE,
-    totalPago      DECIMAL(10, 2),
-    CONSTRAINT PK_MENSUALIDAD PRIMARY KEY (codMensualidad)
-);
 
-CREATE TABLE MENSUALIDAD_has_ESTUDIANTE
-(
-    codEstudiante  INT NOT NULL,
-    codMensualidad INT NOT NULL,
-    CONSTRAINT FK_MENSUALIDAD_has_ESTUDIANTE_ESTUDIANTE FOREIGN KEY (codEstudiante) REFERENCES ESTUDIANTE (codEstudiante),
-    CONSTRAINT FK_MENSUALIDAD_has_ESTUDIANTE_MENSUALIDAD FOREIGN KEY (codMensualidad) REFERENCES MENSUALIDAD (codMensualidad)
-);
 
 
 
@@ -194,6 +178,9 @@ CREATE TABLE PAGO_MENSUALIDAD_ESTUDIANTE
     CONSTRAINT PK_PAGO_MENSUALIDAD_ESTUDIANTE PRIMARY KEY (codPago),
     CONSTRAINT FK_PAGO_MENSUALIDAD_ESTUDIANTE_ESTUDIANTE FOREIGN KEY (codEstudiante) REFERENCES ESTUDIANTE(codEstudiante)
 );
+
+SELECT P.codPago, E.nombre, E.apellido, P.mesPago, P.monto, p.estadoPago
+FROM PAGO_MENSUALIDAD_ESTUDIANTE AS P JOIN ESTUDIANTE E on E.codEstudiante = P.codEstudiante;
 
 
 
@@ -563,9 +550,3 @@ INSERT INTO USUARIO (nombreUsuario, contrasenia, codRol) VALUES
 
 
 
-
-
-SELECT M.codMateria, M.nombreMateria, M.gestion, CONCAT(E.nombre, ' ', E.apellido) AS nombreDocente
-                            FROM MATERIA M
-                            LEFT JOIN  AM ON M.codMateria = AM.codMateria
-                            LEFT JOIN EMPLEADO E ON AM.codEmpleado = E.codEmpleado
