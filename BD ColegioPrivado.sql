@@ -76,19 +76,7 @@ CREATE TABLE HORARIO
     CONSTRAINT FK_HORARIO_CURSOMATERIA FOREIGN KEY (codCursoMateria) REFERENCES CURSOMATERIA (codCursoMateria)
 );
 
-CREATE TABLE PADRE
-(
-    codPadre   INT AUTO_INCREMENT,
-    cedulaId   VARCHAR(15) NOT NULL,
-    nombre     VARCHAR(45) NOT NULL,
-    apellido   VARCHAR(45) NOT NULL,
-    estado     VARCHAR(45),
-    direccion  VARCHAR(100),
-    telefono   VARCHAR(15),
-    parentesco VARCHAR(45),
-    genero     VARCHAR(45),
-    CONSTRAINT PK_PADRE PRIMARY KEY (codPadre)
-);
+
 
 CREATE TABLE ASISTENCIA
 (
@@ -112,13 +100,12 @@ CREATE TABLE ESTUDIANTE
     fechaNacimiento    DATE,
     celular            VARCHAR(15),
     correo             VARCHAR(45),
-    codPadre           INT,
     codAsistencia      INT,
     CONSTRAINT PK_ESTUDIANTE PRIMARY KEY (codEstudiante),
-    CONSTRAINT FK_ESTUDIANTE_PADRE FOREIGN KEY (codPadre) REFERENCES PADRE (codPadre),
     CONSTRAINT FK_ESTUDIANTE_ASISTENCIA FOREIGN KEY (codAsistencia) REFERENCES ASISTENCIA (codAsistencia)
 );
-SELECT * FROM ESTUDIANTE;
+SELECT *
+FROM ESTUDIANTE;
 
 CREATE TABLE NOTA
 (
@@ -148,8 +135,10 @@ CREATE TABLE USUARIO
     nombreUsuario VARCHAR(45) NOT NULL,
     contrasenia   VARCHAR(45) NOT NULL,
     codRol        INT,
+    codEmpleado   INT,
     CONSTRAINT PK_USUARIO PRIMARY KEY (codUsuario),
-    CONSTRAINT FK_ROL FOREIGN KEY (codRol) REFERENCES ROL (codRol)
+    CONSTRAINT FK_ROL FOREIGN KEY (codRol) REFERENCES ROL (codRol),
+    CONSTRAINT FK_USUARIO_EMPLEADO FOREIGN KEY (codEmpleado) REFERENCES EMPLEADO (codEmpleado)
 );
 
 
@@ -368,27 +357,6 @@ VALUES ('Mañana', '08:00:00', '09:00:00', 1),
        ('Mañana', '10:00:00', '11:00:00', 19),
        ('Mañana', '11:00:00', '12:00:00', 20);
 
-INSERT INTO PADRE (cedulaId, nombre, apellido, estado, direccion, telefono, parentesco, genero)
-VALUES ('123456789', 'Juan', 'Pérez', 'Activo', 'Av. Principal 123', '789654321', 'Padre', 'Masculino'),
-       ('234567890', 'María', 'García', 'Activo', 'Calle Secundaria 456', '789654322', 'Madre', 'Femenino'),
-       ('345678901', 'Carlos', 'Rodríguez', 'Activo', 'Av. Tercera 789', '789654323', 'Padre', 'Masculino'),
-       ('456789012', 'Ana', 'Martínez', 'Activo', 'Calle Cuarta 101', '789654324', 'Madre', 'Femenino'),
-       ('567890123', 'Luis', 'González', 'Activo', 'Av. Quinta 202', '789654325', 'Padre', 'Masculino'),
-       ('678901234', 'Elena', 'López', 'Activo', 'Calle Sexta 303', '789654326', 'Madre', 'Femenino'),
-       ('789012345', 'Pedro', 'Ramírez', 'Activo', 'Av. Séptima 404', '789654327', 'Padre', 'Masculino'),
-       ('890123456', 'Laura', 'Sánchez', 'Activo', 'Calle Octava 505', '789654328', 'Madre', 'Femenino'),
-       ('901234567', 'Jorge', 'Fernández', 'Activo', 'Av. Novena 606', '789654329', 'Padre', 'Masculino'),
-       ('012345678', 'Sofía', 'Mendoza', 'Activo', 'Calle Décima 707', '789654330', 'Madre', 'Femenino'),
-       ('123456780', 'Miguel', 'Hernández', 'Activo', 'Av. Undécima 808', '789654331', 'Padre', 'Masculino'),
-       ('234567891', 'Carmen', 'Jiménez', 'Activo', 'Calle Duodécima 909', '789654332', 'Madre', 'Femenino'),
-       ('345678902', 'José', 'Ruiz', 'Activo', 'Av. Decimotercera 1010', '789654333', 'Padre', 'Masculino'),
-       ('456789013', 'Verónica', 'Ortega', 'Activo', 'Calle Decimocuarta 1111', '789654334', 'Madre', 'Femenino'),
-       ('567890124', 'Ricardo', 'Castro', 'Activo', 'Av. Decimoquinta 1212', '789654335', 'Padre', 'Masculino'),
-       ('678901235', 'Patricia', 'Núñez', 'Activo', 'Calle Decimosexta 1313', '789654336', 'Madre', 'Femenino'),
-       ('789012346', 'Fernando', 'Silva', 'Activo', 'Av. Decimoséptima 1414', '789654337', 'Padre', 'Masculino'),
-       ('890123457', 'Marta', 'Rojas', 'Activo', 'Calle Decimoctava 1515', '789654338', 'Madre', 'Femenino'),
-       ('901234568', 'Andrés', 'Paredes', 'Activo', 'Av. Decimonovena 1616', '789654339', 'Padre', 'Masculino'),
-       ('012345679', 'Isabel', 'Peña', 'Activo', 'Calle Vigésima 1717', '789654340', 'Madre', 'Femenino');
 
 INSERT INTO ASISTENCIA (estado, fecha)
 VALUES ('Presente', '2024-01-01'),
@@ -412,48 +380,7 @@ VALUES ('Presente', '2024-01-01'),
        ('Presente', '2024-01-07'),
        ('Ausente', '2024-01-07');
 
-INSERT INTO ESTUDIANTE (cedulaIdEstudiante, nombre, apellido, nacionalidad, genero, tutor, direccion, estado,
-                        fechaNacimiento, celular, correo, codPadre, codAsistencia)
-VALUES ('1000001', 'Ana', 'Sánchez', 'Boliviana', 'Femenino', 'Juan Pérez', 'Calle 1', 'Activo', '2008-01-15',
-        '123456789', 'ana.sanchez@example.com', 1, 1),
-       ('1000002', 'Luis', 'Pérez', 'Boliviana', 'Masculino', 'María García', 'Calle 2', 'Activo', '2007-02-20',
-        '123456780', 'luis.perez@example.com', 2, 2),
-       ('1000003', 'Carlos', 'Rodríguez', 'Boliviana', 'Masculino', 'Carlos Rodríguez', 'Calle 3', 'Activo',
-        '2008-03-25', '123456781', 'carlos.rodriguez@example.com', 3, 3),
-       ('1000004', 'María', 'López', 'Boliviana', 'Femenino', 'Ana Martínez', 'Calle 4', 'Activo', '2007-04-10',
-        '123456782', 'maria.lopez@example.com', 4, 4),
-       ('1000005', 'José', 'Fernández', 'Boliviana', 'Masculino', 'Luis González', 'Calle 5', 'Activo', '2008-05-05',
-        '123456783', 'jose.fernandez@example.com', 5, 5),
-       ('1000006', 'Elena', 'Ramírez', 'Boliviana', 'Femenino', 'Elena López', 'Calle 6', 'Activo', '2007-06-12',
-        '123456784', 'elena.ramirez@example.com', 6, 6),
-       ('1000007', 'Jorge', 'García', 'Boliviana', 'Masculino', 'Pedro Ramírez', 'Calle 7', 'Activo', '2008-07-18',
-        '123456785', 'jorge.garcia@example.com', 7, 7),
-       ('1000008', 'Laura', 'Martínez', 'Boliviana', 'Femenino', 'Laura Sánchez', 'Calle 8', 'Activo', '2007-08-22',
-        '123456786', 'laura.martinez@example.com', 8, 8),
-       ('1000009', 'Miguel', 'Hernández', 'Boliviana', 'Masculino', 'Jorge Fernández', 'Calle 9', 'Activo',
-        '2008-09-30', '123456787', 'miguel.hernandez@example.com', 9, 9),
-       ('1000010', 'Sofía', 'Jiménez', 'Boliviana', 'Femenino', 'Sofía Mendoza', 'Calle 10', 'Activo', '2007-10-15',
-        '123456788', 'sofia.jimenez@example.com', 10, 10),
-       ('1000011', 'Andrés', 'Ruiz', 'Boliviana', 'Masculino', 'Miguel Hernández', 'Calle 11', 'Activo', '2008-11-20',
-        '123456789', 'andres.ruiz@example.com', 11, 11),
-       ('1000012', 'Carmen', 'Ortega', 'Boliviana', 'Femenino', 'Carmen Jiménez', 'Calle 12', 'Activo', '2007-12-25',
-        '123456790', 'carmen.ortega@example.com', 12, 12),
-       ('1000013', 'José', 'Castro', 'Boliviana', 'Masculino', 'José Ruiz', 'Calle 13', 'Activo', '2008-01-05',
-        '123456791', 'jose.castro@example.com', 13, 13),
-       ('1000014', 'Patricia', 'Núñez', 'Boliviana', 'Femenino', 'Verónica Ortega', 'Calle 14', 'Activo', '2007-02-14',
-        '123456792', 'patricia.nunez@example.com', 14, 14),
-       ('1000015', 'Fernando', 'Silva', 'Boliviana', 'Masculino', 'Ricardo Castro', 'Calle 15', 'Activo', '2008-03-25',
-        '123456793', 'fernando.silva@example.com', 15, 15),
-       ('1000016', 'Marta', 'Rojas', 'Boliviana', 'Femenino', 'Patricia Núñez', 'Calle 16', 'Activo', '2007-04-30',
-        '123456794', 'marta.rojas@example.com', 16, 16),
-       ('1000017', 'Isabel', 'Paredes', 'Boliviana', 'Femenino', 'Fernando Silva', 'Calle 17', 'Activo', '2008-05-10',
-        '123456795', 'isabel.paredes@example.com', 17, 17),
-       ('1000018', 'Luis', 'Peña', 'Boliviana', 'Masculino', 'Marta Rojas', 'Calle 18', 'Activo', '2007-06-18',
-        '123456796', 'luis.pena@example.com', 18, 18),
-       ('1000019', 'Carlos', 'Torres', 'Boliviana', 'Masculino', 'Andrés Paredes', 'Calle 19', 'Activo', '2008-07-22',
-        '123456797', 'carlos.torres@example.com', 19, 19),
-       ('1000020', 'Verónica', 'Gómez', 'Boliviana', 'Femenino', 'Isabel Peña', 'Calle 20', 'Activo', '2007-08-25',
-        '123456798', 'veronica.gomez@example.com', 20, 20);
+
 
 INSERT INTO NOTA (codEstudiante, codCursoMateria, trimestre, nota)
 VALUES (1, 1, 'Primer Trimestre', 85.50),
@@ -527,31 +454,42 @@ INSERT INTO ROL (nombre)
 VALUES ('Director'),
        ('Profesor'),
        ('Secretaria'),
-       ('Estudiante');
+       ('Estudiante'),
+       ('Administrador');
+
+
 
 -- Insertar registros en la tabla de usuarios
-INSERT INTO USUARIO (nombreUsuario, contrasenia, codRol)
-VALUES ('director1', 'password1', 1),   -- Director
-       ('profesor1', 'password2', 2),   -- Profesor
-       ('secretaria1', 'password3', 3), -- Secretaria
-       ('estudiante1', 'password4', 4), -- Estudiante
-       ('director2', 'password5', 1),   -- Otro Director
-       ('profesor2', 'password6', 2),   -- Otro Profesor
-       ('secretaria2', 'password7', 3), -- Otra Secretaria
-       ('estudiante2', 'password8', 4), -- Otro Estudiante
-       ('admin', 'admin', 1);
-
+INSERT INTO USUARIO (nombreUsuario, contrasenia, codRol, codEmpleado)
+VALUES ('director1', 'password1', 1, NULL),   -- Director sin relación con empleado
+       ('profesor1', 'password2', 2, 1),      -- Profesor relacionado con empleado Juan Pérez
+       ('secretaria1', 'password3', 3, 3),    -- Secretaria relacionada con empleado Pedro Martínez
+       ('estudiante1', 'password4', 4, NULL), -- Estudiante sin relación con empleado
+       ('director2', 'password5', 1, NULL),   -- Otro Director sin relación con empleado
+       ('profesor2', 'password6', 2, 2),      -- Otro Profesor relacionado con empleado María García
+       ('secretaria2', 'password7', 3, 4),    -- Otra Secretaria relacionada con empleado Ana López
+       ('estudiante2', 'password8', 4, NULL), -- Otro Estudiante sin relación con empleado
+       ('admin', 'admin', 5, NULL); -- Administrador sin relación con empleado
 
 
 DELIMITER //
 CREATE TRIGGER after_student_insert
-AFTER INSERT ON ESTUDIANTE
-FOR EACH ROW
+    AFTER INSERT
+    ON ESTUDIANTE
+    FOR EACH ROW
 BEGIN
     INSERT INTO PAGO_MENSUALIDAD_ESTUDIANTE (codEstudiante, mesPago, monto, estadoPago)
     VALUES (NEW.codEstudiante, CURDATE(), 500.00, 'Pendiente');
-END;//
+END;
+//
 DELIMITER ;
 
-SELECT PAGO_MENSUALIDAD_ESTUDIANTE.mesPago, PAGO_MENSUALIDAD_ESTUDIANTE.estadoPago, PAGO_MENSUALIDAD_ESTUDIANTE.monto, E.nombre
-FROM PAGO_MENSUALIDAD_ESTUDIANTE JOIN ESTUDIANTE E on E.codEstudiante = PAGO_MENSUALIDAD_ESTUDIANTE.codEstudiante;
+SELECT PAGO_MENSUALIDAD_ESTUDIANTE.mesPago,
+       PAGO_MENSUALIDAD_ESTUDIANTE.estadoPago,
+       PAGO_MENSUALIDAD_ESTUDIANTE.monto,
+       E.nombre
+FROM PAGO_MENSUALIDAD_ESTUDIANTE
+         JOIN ESTUDIANTE E on E.codEstudiante = PAGO_MENSUALIDAD_ESTUDIANTE.codEstudiante;
+
+
+SELECT * FROM NOTA;

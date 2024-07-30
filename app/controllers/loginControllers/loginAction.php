@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             session_start();
             $_SESSION['nombreUsuario'] = $user['nombreUsuario'];
             $_SESSION['rol'] = $user['nombreRol']; // Almacenar el rol en la sesión
+            $_SESSION['codEmpleado'] = $user['codEmpleado']; // Almacenar el codEmpleado en la sesión
             header("Location: ../../views/loginViews/dashboard.php");
             exit();
         } else {

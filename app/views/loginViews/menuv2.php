@@ -27,22 +27,21 @@ require_once __DIR__ . '/../../config/checkSession.php';
                 echo '<li><a href="../directorViews/horarios.php">Horarios</a></li>';
                 echo '<li><a href="../directorViews/moneyEst.php">Mensualidades</a></li>';
                 echo '<li><a href="../directorViews/gestionAsignaciones.php">Asignaciones</a></li>';
-            } elseif ($_SESSION['rol'] == 'Docente') {
-                echo '<li><a href="profesorPage1.php">Página del Profesor 1</a></li>';
-                echo '<li><a href="profesorPage2.php">Página del Profesor 2</a></li>';
-            } elseif ($_SESSION['rol'] == 'Secretaria') {
 
+            } elseif ($_SESSION['rol'] == 'Profesor') {
+                echo '<li><a href="../profesorViews/extractoSalario.php">Extracto Salario</a></li>';
+                echo '<li><a href="../profesorViews/seleccionarMateria.php">Mis horarios</a></li>';
+
+            } elseif ($_SESSION['rol'] == 'Secretaria') {
                 echo '<li><a href="../secretaryViews/horarios.php">Horarios</a></li>';
                 echo '<li><a href="../secretaryViews/gestionEstudiante.php">Gestion Estudiantes</a></li>';
                 echo '<li><a href="../directorViews/moneyEst.php">Mensualidades</a></li>';
 
 
             } elseif ($_SESSION['rol'] == 'Estudiante') {
-                echo '<li><a href="estudiantePage1.php">Página del Estudiante 1</a></li>';
-                echo '<li><a href="estudiantePage2.php">Página del Estudiante 2</a></li>';
-            } else {
-                echo '<li><a href="#">Opción 1</a></li>';
-                echo '<li><a href="#">Opción 2</a></li>';
+                echo '<li><a href="../estudianteViews/mensualidad.php">Mensualidad</a></li>';
+                echo '<li><a href="../estudianteViews/notas.php">Notas</a></li>';
+
             }
             ?>
         </ul>
