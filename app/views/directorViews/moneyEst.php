@@ -3,8 +3,20 @@ require_once __DIR__ . '/../../config/checkSession.php';
 require_once __DIR__ . '/../../config/conexion.php';
 
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$mes = isset($_GET['mes']) ? $_GET['mes'] : '';
-$estadoPago = isset($_GET['estadoPago']) ? $_GET['estadoPago'] : '';
+$year = isset($_GET['year']) ? $_GET['year'] : date('Y');
+$month = isset($_GET['month']) ? $_GET['month'] : date('n');
+
+$currentYear = date('Y');
+$yearOptions = range(2020, $currentYear);
+
+
+$monthOptions = [
+    1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
+    5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
+    9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
+];
+
+
 ?>
 
 <!DOCTYPE html>
@@ -14,13 +26,11 @@ $estadoPago = isset($_GET['estadoPago']) ? $_GET['estadoPago'] : '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <title>GESTIÓN DE MENSUALIDADES</title>
+    <title>GESTIÓN DE SALARIOS</title>
 </head>
 <body>
 <div class="min-h-screen bg-base-100 text-base-content">
-
     <div class="container mx-auto p-4">
-
         <?php include "../loginViews/menuv2.php"; ?>
 
         <div class="bg-base-200 p-6 rounded-box shadow-lg">
@@ -29,13 +39,25 @@ $estadoPago = isset($_GET['estadoPago']) ? $_GET['estadoPago'] : '';
             </div>
 
             <form method="GET" class="flex flex-col sm:flex-row gap-4 mb-6">
-                <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Buscar por estudiante" class="input input-bordered flex-grow">
-                <input type="month" name="mes" value="<?php echo htmlspecialchars($mes); ?>" class="input input-bordered">
-                <select name="estadoPago" class="select select-bordered">
-                    <option value="">Todos</option>
-                    <option value="Pagado" <?php if ($estadoPago == 'Pagado') echo 'selected'; ?>>Pagado</option>
-                    <option value="Pendiente" <?php if ($estadoPago == 'Pendiente') echo 'selected'; ?>>Pendiente</option>
+                <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>"
+                       placeholder="Buscar por nombre o apellido" class="input input-bordered flex-grow">
+
+                <select name="year" class="select select-bordered">
+                    <?php foreach ($yearOptions as $yearOption): ?>
+                        <option value="<?php echo $yearOption; ?>" <?php echo $yearOption == $year ? 'selected' : ''; ?>>
+                            <?php echo $yearOption; ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select>
+
+                <select name="month" class="select select-bordered">
+                    <?php foreach ($monthOptions as $monthNumber => $monthName): ?>
+                        <option value="<?php echo $monthNumber; ?>" <?php echo $monthNumber == $month ? 'selected' : ''; ?>>
+                            <?php echo $monthName; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
                 <button type="submit" class="btn btn-primary">Buscar</button>
             </form>
 
@@ -43,46 +65,52 @@ $estadoPago = isset($_GET['estadoPago']) ? $_GET['estadoPago'] : '';
                 <table class="table w-full">
                     <thead>
                     <tr>
-                        <th>Estudiante</th>
-                        <th>Mes de Pago</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Mes Pago</th>
                         <th>Monto</th>
-                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php
-                    $sql = "SELECT E.codEstudiante, E.nombre, E.apellido, 
-                                   COALESCE(PM.mesPago, ?) AS mesPago, 
-                                   COALESCE(PM.monto, 0) AS monto, 
-                                   COALESCE(PM.estadoPago, 'Pendiente') AS estadoPago
-                            FROM ESTUDIANTE E
-                            LEFT JOIN PAGO_MENSUALIDAD_ESTUDIANTE PM 
-                            ON E.codEstudiante = PM.codEstudiante AND DATE_FORMAT(PM.mesPago, '%Y-%m') = ?
-                            WHERE (E.nombre LIKE ? OR E.apellido LIKE ?)
-                            AND (? = '' OR PM.estadoPago = ? OR PM.estadoPago IS NULL)";
+                    $sql = "SELECT E.codEstudiante,
+       E.nombre,
+       E.apellido,
+       IFNULL(P.mesPago, ?) AS mesPago,
+       IFNULL(P.monto, 500.00) AS monto,
+       IFNULL(P.estadoPago, 'Pendiente') AS estadoPago
+FROM ESTUDIANTE E
+LEFT JOIN PAGO_MENSUALIDAD_ESTUDIANTE P 
+    ON E.codEstudiante = P.codEstudiante
+    AND YEAR(P.mesPago) = ?
+    AND MONTH(P.mesPago) = ?
+WHERE (E.nombre LIKE ? OR E.apellido LIKE ?)";
+
                     $stmt = $conexion->prepare($sql);
                     $searchParam = "%$search%";
-                    $stmt->bind_param("ssssss", $mes, $mes, $searchParam, $searchParam, $estadoPago, $estadoPago);
+                    $defaultDate = "$year-$month-01";
+                    $stmt->bind_param("sssss", $defaultDate, $year, $month, $searchParam, $searchParam);
                     $stmt->execute();
                     $result = $stmt->get_result();
 
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             echo "<tr>
-                                    <td>" . htmlspecialchars($row["nombre"]) . " " . htmlspecialchars($row["apellido"]) . "</td>
-                                    <td>" . htmlspecialchars($row["mesPago"]) . "</td>
-                                    <td>" . htmlspecialchars($row["monto"]) . "</td>
-                                    <td>" . htmlspecialchars($row["estadoPago"]) . "</td>
-                                    <td>";
+                <td>" . htmlspecialchars($row["nombre"]) . "</td>
+                <td>" . htmlspecialchars($row["apellido"]) . "</td>
+                <td>" . htmlspecialchars($row["mesPago"]) . "</td>
+                <td>" . htmlspecialchars($row["monto"]) . "</td>
+                <td>" . htmlspecialchars($row["estadoPago"]) . "</td>
+                <td>";
                             if ($row["estadoPago"] == 'Pendiente') {
-                                echo "<a href='../../controllers/directorControllers/gestionMensualidad/marcarPagado.php?estudiante=" . urlencode($row["codEstudiante"]) . "&mes=" . urlencode($row["mesPago"]) . "' class='btn btn-success btn-md mx-2'>Marcar como Pagado</a>";
+                                echo "<a href='../../controllers/directorControllers/gestionMensualidad/pagar.php?id=" . urlencode($row["codEstudiante"]) . "&year=" . urlencode($year) . "&month=" . urlencode($month) . "' class='btn btn-success btn-md mx-2'>Pagar</a>";
                             }
                             echo "</td>
-                                  </tr>";
+              </tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='5' class='text-center'>No hay mensualidades</td></tr>";
+                        echo "<tr><td colspan='6' class='text-center'>No hay registros</td></tr>";
                     }
                     $stmt->close();
                     $conexion->close();
@@ -93,5 +121,6 @@ $estadoPago = isset($_GET['estadoPago']) ? $_GET['estadoPago'] : '';
         </div>
     </div>
 </div>
+
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 CREATE DATABASE colegioPrivado;
 USE colegioPrivado;
 CREATE TABLE EMPLEADO
@@ -14,6 +13,7 @@ CREATE TABLE EMPLEADO
     estado           VARCHAR(45),
     CONSTRAINT PK_EMPLEADO PRIMARY KEY (codEmpleado)
 );
+
 
 CREATE TABLE MATERIA
 (
@@ -47,13 +47,10 @@ CREATE TABLE SALARIO
     tipoSalario VARCHAR(45)    NOT NULL,
     monto       DECIMAL(10, 2) NOT NULL,
     codEmpleado INT,
-    frecuencia VARCHAR(45) DEFAULT 'Mensual',
+    frecuencia  VARCHAR(45) DEFAULT 'Mensual',
     CONSTRAINT PK_SALARIO PRIMARY KEY (codSalario),
     CONSTRAINT FK_SALARIO_EMPLEADO FOREIGN KEY (codEmpleado) REFERENCES EMPLEADO (codEmpleado)
 );
-
-
-
 
 
 
@@ -97,7 +94,7 @@ CREATE TABLE ASISTENCIA
 (
     codAsistencia INT AUTO_INCREMENT,
     estado        VARCHAR(45),
-    fecha         DATE        NOT NULL,
+    fecha         DATE NOT NULL,
     CONSTRAINT PK_ASISTENCIA PRIMARY KEY (codAsistencia)
 );
 
@@ -121,6 +118,7 @@ CREATE TABLE ESTUDIANTE
     CONSTRAINT FK_ESTUDIANTE_PADRE FOREIGN KEY (codPadre) REFERENCES PADRE (codPadre),
     CONSTRAINT FK_ESTUDIANTE_ASISTENCIA FOREIGN KEY (codAsistencia) REFERENCES ASISTENCIA (codAsistencia)
 );
+SELECT * FROM ESTUDIANTE;
 
 CREATE TABLE NOTA
 (
@@ -135,53 +133,49 @@ CREATE TABLE NOTA
 );
 
 
-
-
-
 -- Crear la tabla de roles
-CREATE TABLE ROL(
-  codRol INT AUTO_INCREMENT,
-  nombre VARCHAR(30),
-  CONSTRAINT PK_ROL PRIMARY KEY (codRol)
+CREATE TABLE ROL
+(
+    codRol INT AUTO_INCREMENT,
+    nombre VARCHAR(30),
+    CONSTRAINT PK_ROL PRIMARY KEY (codRol)
 );
 
 -- Crear la tabla de usuarios
-CREATE TABLE USUARIO (
-    codUsuario INT AUTO_INCREMENT,
+CREATE TABLE USUARIO
+(
+    codUsuario    INT AUTO_INCREMENT,
     nombreUsuario VARCHAR(45) NOT NULL,
-    contrasenia VARCHAR(45) NOT NULL,
-    codRol INT,
+    contrasenia   VARCHAR(45) NOT NULL,
+    codRol        INT,
     CONSTRAINT PK_USUARIO PRIMARY KEY (codUsuario),
     CONSTRAINT FK_ROL FOREIGN KEY (codRol) REFERENCES ROL (codRol)
 );
 
 
-CREATE TABLE PAGO_MENSUAL (
-    codPago INT AUTO_INCREMENT,
-    codEmpleado INT NOT NULL,
-    mesPago DATE NOT NULL,
-    monto DECIMAL(10, 2) NOT NULL,
-    estadoPago VARCHAR(45) NOT NULL DEFAULT 'Pendiente',
+CREATE TABLE PAGO_MENSUAL
+(
+    codPago     INT AUTO_INCREMENT,
+    codEmpleado INT            NOT NULL,
+    mesPago     DATE           NOT NULL,
+    monto       DECIMAL(10, 2) NOT NULL,
+    estadoPago  VARCHAR(45)    NOT NULL DEFAULT 'Pendiente',
     CONSTRAINT PK_PAGO_MENSUAL PRIMARY KEY (codPago),
-    CONSTRAINT FK_PAGO_MENSUAL_EMPLEADO FOREIGN KEY (codEmpleado) REFERENCES EMPLEADO(codEmpleado)
+    CONSTRAINT FK_PAGO_MENSUAL_EMPLEADO FOREIGN KEY (codEmpleado) REFERENCES EMPLEADO (codEmpleado)
 );
 
 
 
 CREATE TABLE PAGO_MENSUALIDAD_ESTUDIANTE
 (
-    codPago INT AUTO_INCREMENT,
-    codEstudiante INT NOT NULL,
-    mesPago DATE NOT NULL,
-    monto DECIMAL(10, 2) NOT NULL,
-    estadoPago VARCHAR(45) NOT NULL DEFAULT 'Pendiente',
+    codPago       INT AUTO_INCREMENT,
+    codEstudiante INT            NOT NULL,
+    mesPago       DATE           NOT NULL,
+    monto         DECIMAL(10, 2) NOT NULL,
+    estadoPago    VARCHAR(45)    NOT NULL DEFAULT 'Pendiente',
     CONSTRAINT PK_PAGO_MENSUALIDAD_ESTUDIANTE PRIMARY KEY (codPago),
-    CONSTRAINT FK_PAGO_MENSUALIDAD_ESTUDIANTE_ESTUDIANTE FOREIGN KEY (codEstudiante) REFERENCES ESTUDIANTE(codEstudiante)
+    CONSTRAINT FK_PAGO_MENSUALIDAD_ESTUDIANTE_ESTUDIANTE FOREIGN KEY (codEstudiante) REFERENCES ESTUDIANTE (codEstudiante)
 );
-
-SELECT P.codPago, E.nombre, E.apellido, P.mesPago, P.monto, p.estadoPago
-FROM PAGO_MENSUALIDAD_ESTUDIANTE AS P JOIN ESTUDIANTE E on E.codEstudiante = P.codEstudiante;
-
 
 
 INSERT INTO EMPLEADO (cedulaIdEmpleado, nombre, apellido, tipoEmpleado, direccion, celular, correo, estado)
@@ -345,12 +339,11 @@ VALUES ('Mensual', 2500.00, 1),
        ('Mensual', 4400.00, 20);
 
 INSERT INTO ASIGNACIONCURSO (fechaAsignacion, codEmpleado, codCursoMateria)
-VALUES
-('2024-01-01', 1, 1),
-('2024-01-01', 2, 2),
-('2024-01-01', 4, 4),
-('2024-01-01', 6, 6),
-('2024-01-01', 8, 8);
+VALUES ('2024-01-01', 1, 1),
+       ('2024-01-01', 2, 2),
+       ('2024-01-01', 4, 4),
+       ('2024-01-01', 6, 6),
+       ('2024-01-01', 8, 8);
 
 
 INSERT INTO HORARIO (periodo, horaInicio, horaFin, codCursoMateria)
@@ -530,23 +523,35 @@ VALUES (1, '2024-01-05', 500.00, 'Pagado'),
        (20, '2025-08-05', 490.00, 'Pagado');
 
 -- Insertar registros en la tabla de roles
-INSERT INTO ROL (nombre) VALUES
-('Director'),
-('Profesor'),
-('Secretaria'),
-('Estudiante');
+INSERT INTO ROL (nombre)
+VALUES ('Director'),
+       ('Profesor'),
+       ('Secretaria'),
+       ('Estudiante');
 
 -- Insertar registros en la tabla de usuarios
-INSERT INTO USUARIO (nombreUsuario, contrasenia, codRol) VALUES
-('director1', 'password1', 1), -- Director
-('profesor1', 'password2', 2), -- Profesor
-('secretaria1', 'password3', 3), -- Secretaria
-('estudiante1', 'password4', 4), -- Estudiante
-('director2', 'password5', 1), -- Otro Director
-('profesor2', 'password6', 2), -- Otro Profesor
-('secretaria2', 'password7', 3), -- Otra Secretaria
-('estudiante2', 'password8', 4), -- Otro Estudiante
-('admin', 'admin', 1);
+INSERT INTO USUARIO (nombreUsuario, contrasenia, codRol)
+VALUES ('director1', 'password1', 1),   -- Director
+       ('profesor1', 'password2', 2),   -- Profesor
+       ('secretaria1', 'password3', 3), -- Secretaria
+       ('estudiante1', 'password4', 4), -- Estudiante
+       ('director2', 'password5', 1),   -- Otro Director
+       ('profesor2', 'password6', 2),   -- Otro Profesor
+       ('secretaria2', 'password7', 3), -- Otra Secretaria
+       ('estudiante2', 'password8', 4), -- Otro Estudiante
+       ('admin', 'admin', 1);
 
 
 
+DELIMITER //
+CREATE TRIGGER after_student_insert
+AFTER INSERT ON ESTUDIANTE
+FOR EACH ROW
+BEGIN
+    INSERT INTO PAGO_MENSUALIDAD_ESTUDIANTE (codEstudiante, mesPago, monto, estadoPago)
+    VALUES (NEW.codEstudiante, CURDATE(), 500.00, 'Pendiente');
+END;//
+DELIMITER ;
+
+SELECT PAGO_MENSUALIDAD_ESTUDIANTE.mesPago, PAGO_MENSUALIDAD_ESTUDIANTE.estadoPago, PAGO_MENSUALIDAD_ESTUDIANTE.monto, E.nombre
+FROM PAGO_MENSUALIDAD_ESTUDIANTE JOIN ESTUDIANTE E on E.codEstudiante = PAGO_MENSUALIDAD_ESTUDIANTE.codEstudiante;
