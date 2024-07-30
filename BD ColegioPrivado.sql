@@ -478,4 +478,4 @@ VALUES ('director1', 'password1', 1, NULL),   -- Director sin relación con empl
 
 
 
-
+SELECT * FROM ESTUDIANTE;

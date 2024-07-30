@@ -18,9 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $codPadre = $_POST['codPadre'];
     $codAsistencia = $_POST['codAsistencia'];
 
-    $sql = "UPDATE ESTUDIANTE SET cedulaIdEstudiante=?, nombre=?, apellido=?, nacionalidad=?, genero=?, tutor=?, direccion=?, estado=?, fechaNacimiento=?, celular=?, correo=?, codPadre=?, codAsistencia=? WHERE codEstudiante=?";
+    $sql = "UPDATE ESTUDIANTE SET cedulaIdEstudiante=?, nombre=?, apellido=?, nacionalidad=?, genero=?, tutor=?, direccion=?, estado=?, fechaNacimiento=?, celular=?, correo=?, codAsistencia=? WHERE codEstudiante=?";
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("sssssssssssiii", $cedulaId, $nombre, $apellido, $nacionalidad, $genero, $tutor, $direccion, $estado, $fechaNacimiento, $celular, $correo, $codPadre, $codAsistencia, $codEstudiante);
+    $stmt->bind_param("sssssssssssii", $cedulaId, $nombre, $apellido, $nacionalidad, $genero, $tutor, $direccion, $estado, $fechaNacimiento, $celular, $correo, $codAsistencia, $codEstudiante);
     $stmt->execute();
     $stmt->close();
 

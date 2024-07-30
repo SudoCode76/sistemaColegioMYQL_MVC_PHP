@@ -8,7 +8,7 @@ if (isset($_GET['id']) && isset($_GET['year']) && isset($_GET['month'])) {
 
     // Validar que los parámetros sean números
     if (!is_numeric($codEstudiante) || !is_numeric($year) || !is_numeric($month)) {
-        header("Location: ../../../views/directorViews/moneyEst.php?error=InvalidParameters");
+        header("Location: ../../views/estudianteViews/mensualidad.php?error=InvalidParameters");
         exit();
     }
 
@@ -55,9 +55,9 @@ if (isset($_GET['id']) && isset($_GET['year']) && isset($_GET['month'])) {
         }
 
         if ($stmt->execute()) {
-            header("Location: ../../../views/directorViews/moneyEst.php?success=PaymentUpdated");
+            header("Location: ../../views/estudianteViews/mensualidad.php?success=PaymentUpdated");
         } else {
-            header("Location: ../../../views/directorViews/moneyEst.php?error=UpdateFailed");
+            header("Location: ../../views/estudianteViews/mensualidad.php?error=UpdateFailed");
         }
 
         $stmt->close();
@@ -106,6 +106,6 @@ if (isset($_GET['id']) && isset($_GET['year']) && isset($_GET['month'])) {
         </html>';
     }
 } else {
-    header("Location: ../../../views/estudianteViews/mensualidad.php?error=MissingParameters");
+    header("Location:   ../../views/estudianteViews/mensualidad.php?error=MissingParameters");
 }
 ?>

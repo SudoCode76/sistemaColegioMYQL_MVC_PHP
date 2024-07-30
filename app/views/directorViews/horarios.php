@@ -92,7 +92,7 @@ $periodo = isset($_GET['periodo']) ? $_GET['periodo'] : '';
                             JOIN CURSO C ON CM.codCurso = C.codCurso
                             JOIN ASIGNACIONCURSO AC ON CM.codCursoMateria = AC.codCursoMateria
                             JOIN EMPLEADO E ON AC.codEmpleado = E.codEmpleado
-                            WHERE E.tipoEmpleado = 'Docente'
+                            WHERE E.tipoEmpleado = 'Profesor'
                             AND (E.nombre LIKE ? OR E.apellido LIKE ?)";
 
                     // Variables para los parámetros de la consulta

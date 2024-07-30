@@ -21,18 +21,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $sql = "SELECT CM.codCursoMateria, CONCAT(C.nombreCurso, ' - ', M.nombreMateria) AS cursoMateria
-        FROM CURSOMATERIA CM
-        JOIN CURSO C ON CM.codCurso = C.codCurso
-        JOIN MATERIA M ON CM.codMateria = M.codMateria
-        LEFT JOIN ASIGNACIONCURSO AC ON CM.codCursoMateria = AC.codCursoMateria
-        WHERE AC.codCursoMateria IS NULL";
+            FROM CURSOMATERIA CM
+            JOIN CURSO C ON CM.codCurso = C.codCurso
+            JOIN MATERIA M ON CM.codMateria = M.codMateria";
 $result = $conexion->query($sql);
 $cursosMaterias = $result->fetch_all(MYSQLI_ASSOC);
 
 $sql = "SELECT E.codEmpleado, CONCAT(E.nombre, ' ', E.apellido) AS nombreDocente
-        FROM EMPLEADO E
-        LEFT JOIN ASIGNACIONCURSO AC ON E.codEmpleado = AC.codEmpleado
-        WHERE E.tipoEmpleado = 'Docente' AND AC.codEmpleado IS NULL";
+            FROM EMPLEADO E
+            WHERE E.tipoEmpleado = 'Profesor'";
 $result = $conexion->query($sql);
 $docentes = $result->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -51,6 +48,7 @@ $docentes = $result->fetch_all(MYSQLI_ASSOC);
 
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="space-y-4">
         <div class="form-control">
+
             <label for="codCursoMateria" class="label">Curso y Materia:</label>
             <select class="select select-bordered" id="codCursoMateria" name="codCursoMateria" required>
                 <?php foreach ($cursosMaterias as $cursoMateria) : ?>
@@ -59,6 +57,7 @@ $docentes = $result->fetch_all(MYSQLI_ASSOC);
                     </option>
                 <?php endforeach; ?>
             </select>
+
         </div>
 
         <div class="form-control">
