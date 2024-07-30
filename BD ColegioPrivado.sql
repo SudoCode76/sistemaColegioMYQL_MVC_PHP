@@ -166,6 +166,19 @@ CREATE TABLE PAGO_MENSUALIDAD_ESTUDIANTE
     CONSTRAINT FK_PAGO_MENSUALIDAD_ESTUDIANTE_ESTUDIANTE FOREIGN KEY (codEstudiante) REFERENCES ESTUDIANTE (codEstudiante)
 );
 
+DELIMITER //
+CREATE TRIGGER after_student_insert
+    AFTER INSERT
+    ON ESTUDIANTE
+    FOR EACH ROW
+BEGIN
+    INSERT INTO PAGO_MENSUALIDAD_ESTUDIANTE (codEstudiante, mesPago, monto, estadoPago)
+    VALUES (NEW.codEstudiante, CURDATE(), 500.00, 'Pendiente');
+END;
+//
+DELIMITER ;
+
+
 
 INSERT INTO EMPLEADO (cedulaIdEmpleado, nombre, apellido, tipoEmpleado, direccion, celular, correo, estado)
 VALUES ('12345678', 'Juan', 'Pérez', 'Docente', 'Av. Principal 123', '789654321', 'juan.perez@example.com', 'Activo'),
@@ -472,24 +485,5 @@ VALUES ('director1', 'password1', 1, NULL),   -- Director sin relación con empl
        ('admin', 'admin', 5, NULL); -- Administrador sin relación con empleado
 
 
-DELIMITER //
-CREATE TRIGGER after_student_insert
-    AFTER INSERT
-    ON ESTUDIANTE
-    FOR EACH ROW
-BEGIN
-    INSERT INTO PAGO_MENSUALIDAD_ESTUDIANTE (codEstudiante, mesPago, monto, estadoPago)
-    VALUES (NEW.codEstudiante, CURDATE(), 500.00, 'Pendiente');
-END;
-//
-DELIMITER ;
-
-SELECT PAGO_MENSUALIDAD_ESTUDIANTE.mesPago,
-       PAGO_MENSUALIDAD_ESTUDIANTE.estadoPago,
-       PAGO_MENSUALIDAD_ESTUDIANTE.monto,
-       E.nombre
-FROM PAGO_MENSUALIDAD_ESTUDIANTE
-         JOIN ESTUDIANTE E on E.codEstudiante = PAGO_MENSUALIDAD_ESTUDIANTE.codEstudiante;
 
 
-SELECT * FROM NOTA;

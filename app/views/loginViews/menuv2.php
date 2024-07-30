@@ -9,6 +9,8 @@ require_once __DIR__ . '/../../config/checkSession.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 </head>
 
 
@@ -42,6 +44,15 @@ require_once __DIR__ . '/../../config/checkSession.php';
                 echo '<li><a href="../estudianteViews/mensualidad.php">Mensualidad</a></li>';
                 echo '<li><a href="../estudianteViews/notas.php">Notas</a></li>';
 
+            } elseif ($_SESSION['rol'] == 'Administrador') {
+                echo '<li><a href="../directorViews/cuentas.php">Cuentas</a></li>';
+                echo '<li><a href="../directorViews/gestionSalarios.php">Salarios</a></li>';
+                echo '<li><a href="../directorViews/horarios.php">Horarios</a></li>';
+                echo '<li><a href="../directorViews/moneyEst.php">Mensualidades</a></li>';
+                echo '<li><a href="../directorViews/gestionAsignaciones.php">Asignaciones</a></li>';
+                echo '<li><a href="../secretaryViews/gestionEstudiante.php">Estudiantes</a></li>';
+                echo '<li><a href="../estudianteViews/mensualidad.php">Mensualidad Estudiante</a></li>';
+                echo '<li><a href="../estudianteViews/notas.php">Notas Estudiante</a></li>';
             }
             ?>
         </ul>
